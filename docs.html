@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SFT Studio Pro Documentation &amp; Guides — Export Formats, Reasoning Tags, TRiAD Alignment</title>
+  <meta name="description" content="SFT Studio Pro documentation: supported fine-tuning dataset export formats (ChatML, Alpaca, Mistral, DeepSeek R1 reasoning, OpenAI o1/o3, ShareGPT, completion pairs) and the TRiAD Core Alignment Standard." />
+  <meta name="robots" content="index, follow" />
+  <link rel="canonical" href="https://llmtrainer.courses/docs.html" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="SFT Studio Pro Documentation &amp; Guides" />
+  <meta property="og:description" content="Dataset specifications, reasoning tag formatting, and export schemas for SFT Studio Pro." />
+  <meta property="og:url" content="https://llmtrainer.courses/docs.html" />
+  <meta property="og:image" content="https://llmtrainer.courses/og-preview.jpg" />
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "TechArticle",
+    "headline": "SFT Studio Pro Documentation & Guides",
+    "description": "Dataset specifications, reasoning tag formatting, and export schemas for SFT Studio Pro.",
+    "url": "https://llmtrainer.courses/docs.html",
+    "publisher": { "@type": "Organization", "name": "TRiADiC Intelligence Labs", "url": "https://triadai.agency" }
+  }
+  </script>
+  <style>
+    body { margin: 0; background: #0f172a; color: #e2e8f0; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; line-height: 1.6; }
+    main { max-width: 860px; margin: 0 auto; padding: 2.5rem 1.25rem; }
+    h1 { color: #fff; font-size: 1.6rem; margin-bottom: 0.25rem; }
+    h2 { color: #fff; font-size: 1.15rem; border-bottom: 1px solid #1e293b; padding-bottom: 0.5rem; margin-top: 2rem; }
+    h3 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .subtitle { color: #94a3b8; font-size: 0.9rem; }
+    .card { background: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 1rem; margin: 0.9rem 0; }
+    .card p { color: #94a3b8; margin: 0.25rem 0 0.6rem; font-size: 0.92rem; }
+    pre { background: #0f172a; padding: 0.6rem; border-radius: 8px; font-size: 0.8rem; overflow-x: auto; margin: 0; white-space: pre-wrap; }
+    a { color: #34d399; }
+    .c1 { color: #60a5fa; } .c2 { color: #34d399; } .c3 { color: #fbbf24; } .c4 { color: #c084fc; } .c5 { color: #22d3ee; }
+    .triad { background: #020617; border: 1px solid #1e293b; border-radius: 12px; padding: 1rem; }
+    .cta { margin-top: 2rem; padding: 1rem; border: 1px solid #1e293b; border-radius: 12px; }
+    .cta div { color: #94a3b8; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <main>
+    <header>
+      <h1>SFT Studio Pro Documentation &amp; Guides</h1>
+      <p class="subtitle">Dataset specifications, reasoning tag formatting, and export schemas</p>
+      <p class="subtitle"><a href="/">Back to SFT Studio Pro</a></p>
+    </header>
+
+    <section>
+      <h2>Supported Export Template Formats</h2>
+
+      <article class="card">
+        <h3 class="c1">1. ChatML Standard &amp; Token Format (&lt;|im_start|&gt;)</h3>
+        <p>Standard JSONL message array or raw serialized token text with &lt;|im_start|&gt; and &lt;|im_end|&gt; tags compatible with ChatML tokenizers, Axolotl, and vLLM.</p>
+        <pre>messages: [...] | text: "&lt;|im_start|&gt;system\n...&lt;|im_end|&gt;\n&lt;|im_start|&gt;user\n...&lt;|im_end|&gt;\n&lt;|im_start|&gt;assistant\n...&lt;|im_end|&gt;"</pre>
+      </article>
+
+      <article class="card">
+        <h3 class="c2">2. Stanford Alpaca Format</h3>
+        <p>Canonical instruction tuning format organizing records into instruction, input context, and target output fields for Axolotl, LLaMA-Factory, and Unsloth.</p>
+        <pre>{ instruction: "...", input: "...", output: "..." }</pre>
+      </article>
+
+      <article class="card">
+        <h3 class="c3">3. Mistral Instruction Format</h3>
+        <p>Standardized multi-tier instruction schema explicitly isolating system guidelines, instruction queries, context inputs, and target responses.</p>
+        <pre>{ system: "...", instruction: "...", input: "...", response: "..." }</pre>
+      </article>
+
+      <article class="card">
+        <h3 class="c4">4. DeepSeek R1 / Reasoning (&lt;think&gt;)</h3>
+        <p>Embeds step-by-step thinking traces inside <code>&lt;think&gt;...&lt;/think&gt;</code> tags directly preceding the response content in assistant turns.</p>
+        <pre>content: "&lt;think&gt;\nStep 1 reasoning...\n&lt;/think&gt;\n\nFinal answer."</pre>
+      </article>
+
+      <article class="card">
+        <h3 class="c5">5. OpenAI o1/o3, ShareGPT &amp; Completion Pairs</h3>
+        <p>Full interoperability with o1/o3 reasoning keys (<code>reasoning_content</code>), ShareGPT multi-turn dialogues (<code>conversations: [from, value]</code>), and completion pairs (<code>prompt, response</code>).</p>
+        <pre>{ reasoning_content: "...", content: "..." } | { conversations: [...] } | { prompt: "...", response: "..." }</pre>
+      </article>
+    </section>
+
+    <section class="triad">
+      <h2 style="margin-top:0">TRiAD Core Alignment Standard</h2>
+      <p>When fine-tuning models, avoid relying solely on heavy post-hoc RLHF/guardrail filters. TRiAD AI dataset curation injects <strong>Freedom, Truth, and Kindness</strong> natively into training prompt-completion pairs to produce balanced, authentic, and reliable assistant personas.</p>
+    </section>
+
+    <section class="cta">
+      <strong>Need Custom Engineering or Agency Datasets?</strong>
+      <div>TRiADiC Intelligence Labs provides custom dataset curation and fine-tuning pipelines.</div>
+      <p><a href="https://triadai.agency" rel="noopener noreferrer">triadai.agency</a></p>
+    </section>
+  </main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "skills": {
+    "configure": {
+      "source": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceUrl": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceType": "git",
+      "skillPath": "skills/configure/SKILL.md",
+      "computedHash": "fb952665157925a824105a28df656d315de4972f52d1a9278de7e9029502ff1b"
+    },
+    "debug": {
+      "source": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceUrl": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceType": "git",
+      "skillPath": "skills/debug/SKILL.md",
+      "computedHash": "71550a7300c268f9ebf615dec5e6593ececccae4cffba84d9171f95589722532"
+    },
+    "fireworks-training": {
+      "source": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceUrl": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceType": "git",
+      "skillPath": "skills/fireworks-training/SKILL.md",
+      "computedHash": "bb77336f65d5bbbd9e74b3e174e67ba44f2cfcfd09ff448126d44579491334b0"
+    },
+    "research": {
+      "source": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceUrl": "https://github.replit.internal/fw-ai/cookbook.git",
+      "sourceType": "git",
+      "skillPath": "skills/research/SKILL.md",
+      "computedHash": "c6924d21ea3aa0de221996da08fb78f8a0d083da0eb3625eb152ff0780e777aa"
+    }
+  }
+}

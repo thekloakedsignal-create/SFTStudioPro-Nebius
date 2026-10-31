@@ -1,0 +1,251 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>AI Fine-Tuning Pipeline: Idea to Model | SFT Studio Pro</title>
+    <meta
+      name="description"
+      content="Turn an AI project idea into a fine-tuned model with SFT Studio Pro. Define a project, build and review training data, run SFT, and access the finished model."
+    />
+    <meta name="robots" content="index,follow,max-image-preview:large" />
+    <link rel="canonical" href="https://llmtrainer.courses/training-pipeline.html" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:site_name" content="SFT Studio Pro" />
+    <meta property="og:title" content="AI Fine-Tuning Pipeline: Idea to Model | SFT Studio Pro" />
+    <meta
+      property="og:description"
+      content="Define your project, create and validate training data, run supervised fine-tuning, and access your trained model."
+    />
+    <meta property="og:url" content="https://llmtrainer.courses/training-pipeline.html" />
+    <meta property="og:image" content="https://llmtrainer.courses/og-preview.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="AI Fine-Tuning Pipeline: Idea to Model | SFT Studio Pro" />
+    <meta
+      name="twitter:description"
+      content="Follow the complete supervised fine-tuning workflow from project idea to trained model."
+    />
+    <meta name="twitter:image" content="https://llmtrainer.courses/og-preview.jpg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap"
+      rel="stylesheet"
+    />
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "SFT Studio Pro",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "Web",
+        "url": "https://llmtrainer.courses/",
+        "description": "An end-to-end supervised fine-tuning workspace for project definition, training-data creation and review, automated model training, and trained-model access.",
+        "provider": {
+          "@type": "Organization",
+          "name": "TRiADiC Intelligence Labs"
+        }
+      }
+    </script>
+    <style>
+      :root {
+        color-scheme: light;
+        --cream: #f6f1e6;
+        --cream-deep: #eee8d9;
+        --paper: #fdfbf4;
+        --grey-050: #f2eff5;
+        --grey-100: #e9e4ee;
+        --grey-300: #cfc7dc;
+        --purple-300: #b7a3d6;
+        --purple-500: #6d46a8;
+        --purple-700: #4b2e7c;
+        --purple-900: #2c1b45;
+        --ink: #38303f;
+        --ink-soft: #6d6580;
+        --shadow: 0 32px 64px rgba(44, 27, 69, 0.14);
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(1200px 600px at 50% -10%, #faf6ec 0%, transparent 60%),
+          linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+        font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+        color: var(--ink);
+        padding: clamp(1rem, 4vw, 3.5rem) 1rem;
+      }
+      a { color: var(--purple-700); }
+      .wrap { max-width: 900px; margin: 0 auto; }
+      header.wrap { margin-bottom: 1.5rem; }
+      header a { font-weight: 600; text-decoration: none; }
+      header a:hover, footer a:hover { text-decoration: underline; }
+      .page {
+        background: var(--paper);
+        border: 1px solid rgba(75, 46, 124, 0.10);
+        outline: 1px solid rgba(75, 46, 124, 0.05);
+        outline-offset: 6px;
+        box-shadow: var(--shadow);
+        padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4rem);
+        position: relative;
+      }
+      .page::before {
+        content: "";
+        position: absolute;
+        inset: 0 0 auto;
+        height: 4px;
+        background: linear-gradient(90deg, var(--purple-700), var(--purple-300), var(--purple-700));
+      }
+      .masthead { text-align: center; }
+      .eyebrow {
+        margin: 0 0 1.25rem;
+        font-size: .78rem;
+        font-weight: 600;
+        font-style: italic;
+        letter-spacing: .42em;
+        text-transform: uppercase;
+        color: var(--purple-500);
+      }
+      .masthead__title {
+        margin: 0;
+        font-size: clamp(2rem, 5.5vw, 3.4rem);
+        font-weight: 700;
+        line-height: 1.12;
+        color: var(--purple-900);
+      }
+      .masthead__subtitle {
+        margin: .9rem 0 0;
+        font-size: clamp(1rem, 2.4vw, 1.2rem);
+        font-style: italic;
+        color: var(--ink-soft);
+      }
+      .masthead__desc {
+        margin: 1.2rem auto 0;
+        max-width: 38rem;
+        font-size: 1rem;
+        font-style: italic;
+        line-height: 1.7;
+        color: var(--ink-soft);
+      }
+      .masthead__rule {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: .85rem;
+        margin: 1.75rem auto 1.5rem;
+        max-width: 340px;
+      }
+      .masthead__line { flex: 1; height: 1px; background: var(--purple-300); }
+      .masthead__diamond { width: 8px; height: 8px; flex: none; background: var(--purple-500); transform: rotate(45deg); }
+      .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: .75rem; margin: 1.5rem 0 3rem; }
+      .button {
+        display: inline-block;
+        padding: .55rem .9rem;
+        border: 1px solid var(--purple-300);
+        border-radius: 4px;
+        background: var(--grey-050);
+        color: var(--purple-700);
+        font-weight: 600;
+        text-decoration: none;
+      }
+      .button:hover { background: var(--grey-100); }
+      .doc h2 {
+        margin: 2.4rem 0 .75rem;
+        font-size: 1.45rem;
+        font-weight: 700;
+        color: var(--purple-700);
+      }
+      .doc h2:first-of-type { margin-top: 0; }
+      .doc p, .steps p { margin: .8rem 0; font-size: 1.02rem; line-height: 1.75; }
+      .steps { margin: .8rem 0; padding-left: 1.5rem; font-size: 1.02rem; line-height: 1.75; }
+      .steps li + li { margin-top: .35rem; }
+      .steps h3 { display: inline; margin: 0; font-size: 1.05rem; font-weight: 700; color: var(--purple-700); }
+      .details {
+        margin-top: 2.5rem;
+        padding: 1.25rem 1.5rem;
+        border: 1px solid var(--grey-100);
+        border-left: 3px solid var(--purple-300);
+        background: var(--grey-050);
+      }
+      .details h2 { margin-top: 0; }
+      footer { margin-top: 2rem; color: var(--ink-soft); font-size: .95rem; }
+      footer nav { display: flex; flex-wrap: wrap; gap: .6rem 1.25rem; }
+      @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; } }
+    </style>
+  </head>
+  <body>
+    <header class="wrap">
+      <a href="/">SFT Studio Pro</a>
+    </header>
+    <main class="page wrap">
+      <header class="masthead">
+        <p class="eyebrow">TRiAD Ai</p>
+        <h1 class="masthead__title">Take an AI project idea through fine-tuning to a trained model</h1>
+        <p class="masthead__subtitle">Supervised Fine-Tuning Synthesis Workspace</p>
+        <p class="masthead__desc">
+        SFT Studio Pro brings project planning, training-data creation and review,
+        automated fine-tuning, and model access into one connected workflow.
+        </p>
+        <div class="masthead__rule" aria-hidden="true">
+          <span class="masthead__line"></span>
+          <span class="masthead__diamond"></span>
+          <span class="masthead__line"></span>
+        </div>
+        <p class="eyebrow">The complete workflow</p>
+        <div class="actions">
+          <a class="button" href="/sign-up">Start a project</a>
+          <a class="button" href="/manual.html">Read the full workflow guide</a>
+        </div>
+      </header>
+
+      <section class="doc" aria-labelledby="pipeline-heading">
+        <h2 id="pipeline-heading">The full fine-tuning pipeline</h2>
+        <ol class="steps">
+          <li>
+            <h3>Define the project.</h3>
+            <p>Describe the model’s purpose, intended behavior, voice, and example format before building the training corpus.</p>
+          </li>
+          <li>
+            <h3>Create training examples.</h3>
+            <p>Generate examples in batches or convert source documents into training examples that match the project.</p>
+          </li>
+          <li>
+            <h3>Review quality and coverage.</h3>
+            <p>Inspect batches, run quality checks, and approve the examples that belong in the training dataset.</p>
+          </li>
+          <li>
+            <h3>Assemble the training dataset.</h3>
+            <p>Organize approved examples in the registry and prepare the training corpus and validation data.</p>
+          </li>
+          <li>
+            <h3>Run supervised fine-tuning.</h3>
+            <p>Choose a supported base model and run the automated training workflow on the prepared data.</p>
+          </li>
+          <li>
+            <h3>Access the trained model.</h3>
+            <p>When training completes, open the resulting model repository or download the available model weights.</p>
+          </li>
+        </ol>
+      </section>
+
+      <section class="details doc" aria-labelledby="audience-heading">
+        <h2 id="audience-heading">Build a model around your use case</h2>
+        <p>
+          Use the workflow to shape a focused assistant, adapt a model to a domain,
+          or create consistent task-specific behavior with examples you review.
+          Start from a project definition, then move through data preparation,
+          training, and access to the resulting model.
+        </p>
+        <a href="/sign-up">Create an SFT Studio Pro account</a>
+      </section>
+    </main>
+    <footer class="wrap">
+      <nav aria-label="Related SFT Studio Pro resources">
+        <a href="/manual.html">Complete workflow manual</a>
+        <a href="/docs.html">Dataset formats and documentation</a>
+        <a href="/sign-in">Sign in</a>
+      </nav>
+    </footer>
+  </body>
+</html>
