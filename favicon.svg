@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="100%" height="100%">
+  <rect width="64" height="64" rx="14" fill="#17141c" />
+
+  <!-- Solid metallic-purple TRIAD emblem -->
+  <path 
+    d="M 30.2 12.2
+       C 31.0 10.8 33.0 10.8 33.8 12.2
+       L 55.4 46.2
+       C 56.2 47.6 55.2 49.5 53.6 49.5
+       L 10.4 49.5
+       C 8.8 49.5 7.8 47.6 8.6 46.2
+       Z" 
+    fill="#a600ff" 
+    stroke="#a600ff" 
+    stroke-width="1.2"
+  />
+
+  <polygon points="32,44 23,28 41,28" fill="#17141c" />
+
+  <circle cx="32" cy="14" r="2.2" fill="#a600ff" />
+  <circle cx="51.5" cy="46.5" r="2" fill="#a600ff" />
+  <circle cx="12.5" cy="46.5" r="2" fill="#a600ff" />
+  <circle cx="32" cy="33.5" r="2" fill="#a600ff" />
+</svg>

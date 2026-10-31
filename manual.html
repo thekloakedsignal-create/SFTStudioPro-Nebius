@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>AI Fine-Tuning Workflow: Idea to Trained Model | SFT Studio Pro Guide</title><meta name="description" content="Follow SFT Studio Pro’s full AI fine-tuning pipeline: define a project, create and validate datasets, run automated training, and access the trained model."><meta name="robots" content="index,follow,max-image-preview:large"><link rel="canonical" href="https://llmtrainer.courses/manual.html"><link rel="sitemap" type="application/xml" href="/sitemap.xml"><meta property="og:type" content="article"><meta property="og:title" content="AI Fine-Tuning Workflow: Idea to Trained Model"><meta property="og:description" content="A complete guide to project definition, dataset creation and QA, automated model training, and access to the resulting model."><meta property="og:url" content="https://llmtrainer.courses/manual.html"><meta property="og:image" content="https://llmtrainer.courses/og-preview.jpg"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="AI Fine-Tuning Workflow: Idea to Trained Model"><meta name="twitter:description" content="Follow the complete SFT workflow from project definition through data QA, automated training, and model access."><script type="application/ld+json">{"@context":"https://schema.org","@type":"TechArticle","headline":"AI Fine-Tuning Workflow: Idea to Trained Model","description":"Complete documentation for moving from project definition through dataset creation and validation, automated SFT training, and trained model access.","url":"https://llmtrainer.courses/manual.html","inLanguage":"en","publisher":{"@type":"Organization","name":"TRiADiC Intelligence Labs","url":"https://triadai.agency"}}</script>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&display=swap" rel="stylesheet" />
+<style>
+/* SFT Studio Pro · User Manual
+   Palette: purple / light grey / cream · Typeface: Playfair Display */
+
+:root {
+  --cream: #f6f1e6;
+  --cream-deep: #eee8d9;
+  --paper: #fdfbf4;
+
+  --grey-050: #f2eff5;
+  --grey-100: #e9e4ee;
+  --grey-300: #cfc7dc;
+
+  --purple-300: #b7a3d6;
+  --purple-500: #6d46a8;
+  --purple-700: #4b2e7c;
+  --purple-900: #2c1b45;
+
+  --ink: #38303f;
+  --ink-soft: #6d6580;
+
+  --shadow: 0 32px 64px rgba(44, 27, 69, 0.14);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(1200px 600px at 50% -10%, #faf6ec 0%, transparent 60%),
+    linear-gradient(180deg, var(--cream) 0%, var(--cream-deep) 100%);
+  font-family: "Playfair Display", Georgia, "Times New Roman", serif;
+  color: var(--ink);
+  padding: clamp(1rem, 4vw, 3.5rem) 1rem;
+}
+
+/* ---------- Paper sheet ---------- */
+
+.page {
+  max-width: 900px;
+  margin: 0 auto;
+  background: var(--paper);
+  border: 1px solid rgba(75, 46, 124, 0.10);
+  outline: 1px solid rgba(75, 46, 124, 0.05);
+  outline-offset: 6px;
+  box-shadow: var(--shadow);
+  padding: clamp(2rem, 5vw, 4rem) clamp(1.25rem, 5vw, 4rem);
+  position: relative;
+}
+
+.page::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--purple-700), var(--purple-300), var(--purple-700));
+}
+
+/* ---------- Masthead (ToC) ---------- */
+
+.masthead {
+  text-align: center;
+}
+
+.masthead__brand {
+  margin: 0 0 1.25rem;
+  font-size: 0.78rem;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--purple-500);
+}
+
+.masthead__title {
+  margin: 0;
+  font-size: clamp(2.4rem, 6.5vw, 3.9rem);
+  font-weight: 700;
+  line-height: 1.08;
+  color: var(--purple-900);
+}
+
+.masthead__subtitle {
+  margin: 0.9rem 0 0;
+  font-size: clamp(1rem, 2.4vw, 1.2rem);
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+.masthead__desc {
+  margin: 1.2rem auto 0;
+  max-width: 38rem;
+  font-size: 1rem;
+  font-style: italic;
+  line-height: 1.7;
+  color: var(--ink-soft);
+}
+
+.masthead__rule {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.85rem;
+  margin: 1.75rem auto 1.5rem;
+  max-width: 340px;
+}
+
+.masthead__line {
+  flex: 1;
+  height: 1px;
+  background: var(--purple-300);
+}
+
+.masthead__diamond {
+  width: 8px;
+  height: 8px;
+  background: var(--purple-500);
+  transform: rotate(45deg);
+  flex: none;
+}
+
+.masthead__toc {
+  margin: 0;
+  font-size: clamp(1.25rem, 3vw, 1.6rem);
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  color: var(--purple-700);
+}
+
+/* ---------- Table of contents ---------- */
+
+.toc {
+  margin-top: 2.75rem;
+}
+
+.toc__list,
+.toc__children {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.toc__group + .toc__group {
+  margin-top: 1.35rem;
+}
+
+.toc__children {
+  padding-left: 1.9rem;
+  margin-top: 0.15rem;
+}
+
+.toc__row {
+  display: flex;
+  align-items: baseline;
+  text-decoration: none;
+  color: inherit;
+  padding: 0.42rem 0.9rem;
+  margin: 0 -0.9rem;
+  border-radius: 6px;
+  transition: background-color 160ms ease;
+}
+
+.toc__row:hover {
+  background-color: var(--grey-050);
+}
+
+.toc__row:focus-visible {
+  outline: 2px solid var(--purple-500);
+  outline-offset: 2px;
+}
+
+.toc__row--part {
+  font-size: 1.12rem;
+  font-weight: 600;
+  color: var(--purple-700);
+}
+
+.toc__row--part .toc__page {
+  font-weight: 600;
+  color: var(--purple-500);
+}
+
+.toc__row--child {
+  font-size: 1rem;
+  font-weight: 400;
+  color: var(--ink);
+}
+
+.toc__leader {
+  flex: 1 1 auto;
+  min-width: 1.75rem;
+  margin: 0 0.65rem;
+  border-bottom: 2px dotted var(--grey-300);
+  transform: translateY(-0.28em);
+}
+
+.toc__page {
+  flex: none;
+  font-variant-numeric: tabular-nums;
+  font-weight: 500;
+  color: var(--ink-soft);
+  text-align: right;
+}
+
+/* ---------- Content page chrome ---------- */
+
+.topline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 2.25rem;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--grey-100);
+}
+
+.topline__brand {
+  font-size: 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--purple-500);
+}
+
+.topline a {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--purple-700);
+  text-decoration: none;
+}
+
+.topline a:hover {
+  text-decoration: underline;
+}
+
+.doc-head {
+  margin-bottom: 2rem;
+}
+
+.doc-head__kicker {
+  margin: 0 0 0.5rem;
+  font-size: 0.75rem;
+  font-style: italic;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  color: var(--purple-500);
+}
+
+.doc-head h1 {
+  margin: 0;
+  font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+  font-weight: 700;
+  line-height: 1.15;
+  color: var(--purple-900);
+}
+
+.doc__section {
+  scroll-margin-top: 1.5rem;
+}
+
+.doc h2 {
+  margin: 2.4rem 0 0.75rem;
+  font-size: 1.45rem;
+  font-weight: 700;
+  color: var(--purple-700);
+}
+
+.doc h2:first-of-type {
+  margin-top: 0;
+}
+
+.doc h3 {
+  margin: 1.75rem 0 0.5rem;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--purple-700);
+}
+
+.doc p {
+  margin: 0.8rem 0;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.doc ul,
+.doc ol {
+  margin: 0.8rem 0;
+  padding-left: 1.5rem;
+  font-size: 1.02rem;
+  line-height: 1.75;
+}
+
+.doc li + li {
+  margin-top: 0.35rem;
+}
+
+.doc strong {
+  color: var(--purple-900);
+}
+
+.doc hr {
+  margin: 2.5rem auto;
+  border: none;
+  border-top: 1px solid var(--grey-100);
+}
+
+/* ---------- Tables ---------- */
+
+.table-scroll {
+  overflow-x: auto;
+  margin: 1.1rem 0 1.5rem;
+  border: 1px solid var(--grey-100);
+  border-radius: 8px;
+}
+
+.table-scroll table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.98rem;
+  line-height: 1.5;
+  background: var(--paper);
+}
+
+.table-scroll th {
+  background: var(--grey-050);
+  color: var(--purple-700);
+  font-weight: 700;
+  text-align: left;
+  padding: 0.7rem 0.9rem;
+  border-bottom: 2px solid var(--purple-300);
+  white-space: nowrap;
+}
+
+.table-scroll td {
+  padding: 0.65rem 0.9rem;
+  border-bottom: 1px solid var(--grey-100);
+  vertical-align: top;
+}
+
+.table-scroll tr:last-child td {
+  border-bottom: none;
+}
+
+.table-scroll tr:hover td {
+  background: var(--grey-050);
+}
+
+/* ---------- Prev / next navigation ---------- */
+
+.pagenav {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--grey-100);
+}
+
+.pagenav a {
+  display: inline-block;
+  padding: 0.6rem 1rem;
+  border: 1px solid var(--grey-300);
+  border-radius: 6px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--purple-700);
+  text-decoration: none;
+  transition: background-color 160ms ease, border-color 160ms ease;
+}
+
+.pagenav a:hover {
+  background: var(--grey-050);
+  border-color: var(--purple-300);
+}
+
+.pagenav__toc {
+  text-align: center;
+}
+
+.pagenav__next {
+  text-align: right;
+  justify-self: end;
+}
+
+.pagenav__spacer {
+  visibility: hidden;
+}
+
+/* ---------- Colophon ---------- */
+
+.colophon {
+  margin-top: 3rem;
+  padding-top: 1.4rem;
+  border-top: 1px solid var(--grey-100);
+  text-align: center;
+}
+
+.colophon p {
+  margin: 0;
+  font-size: 0.85rem;
+  font-style: italic;
+  color: var(--ink-soft);
+}
+
+/* ---------- Responsive ---------- */
+
+@media (max-width: 640px) {
+  .toc__children {
+    padding-left: 1.05rem;
+  }
+
+  .toc__row--part {
+    font-size: 1.05rem;
+  }
+
+  .toc__row--child {
+    font-size: 0.95rem;
+  }
+
+  .pagenav {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+
+  .pagenav__next {
+    justify-self: stretch;
+  }
+
+  .pagenav__spacer {
+    display: none;
+  }
+}
+.page + .page{margin-top:2.5rem}.manual-back{display:block;max-width:900px;margin:0 auto 1.5rem;color:var(--purple-700);font-weight:600}section[id]{scroll-margin-top:1rem}
+</style>
+</head>
+<body>
+<a class="manual-back" href="./">Back to SFT Studio Pro</a>
+<a class="manual-back" href="/training-pipeline.html">Explore the full AI fine-tuning pipeline</a>
+<main>
+<section class="page" id="manual-contents">
+
+    <header class="masthead">
+      <p class="masthead__brand">TRiAD Ai</p>
+      <h1 class="masthead__title">SFT Studio Pro</h1>
+      <p class="masthead__subtitle">Supervised Fine-Tuning Synthesis Workspace</p>
+      <p class="masthead__desc">A complete, sequential guide to project onboarding, data creation, document conversion, quality assurance, registry management, automated model training, and your free model sample.</p>
+      <div class="masthead__rule" aria-hidden="true">
+        <span class="masthead__line"></span>
+        <span class="masthead__diamond"></span>
+        <span class="masthead__line"></span>
+      </div>
+      <p class="masthead__toc">Table of Contents</p>
+    </header>
+
+    <nav class="toc" aria-label="Table of contents">
+      <ul class="toc__list">
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-welcome">
+            <span class="toc__title">Welcome to SFT Studio Pro</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">2</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-welcome-understanding-sft"><span class="toc__title">Understanding SFT</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">2</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-welcome-planning-the-dataset"><span class="toc__title">Planning the Dataset</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">2</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-welcome-quality-and-coverage"><span class="toc__title">Quality and Coverage</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">2</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-welcome-training-corpus-and-validator"><span class="toc__title">Training Corpus and Validator</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">2</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-one-define-the-project">
+            <span class="toc__title">Part One · Project Onboarding and Definition</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">3</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-one-define-the-project"><span class="toc__title">1.1 Answer the Onboarding Questions</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-one-define-the-project"><span class="toc__title">1.2 Review the Definition and Golden Example</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-one-define-the-project"><span class="toc__title">1.3 Review the Suggested Batch Topics</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-one-define-the-project"><span class="toc__title">1.4 Choose Whether to Start Batch Generation</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-one-define-the-project"><span class="toc__title">1.5 Save &amp; Lock the Project Definition</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-two-batch-synthesizer">
+            <span class="toc__title">Part Two · Batch Synthesizer and Data Creation</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">3</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-what-a-batch-is"><span class="toc__title">2.1 What a Batch Is</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-ai-guided-batch-generation"><span class="toc__title">2.2 Automated Batch Generation</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">3–4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-choose-the-batches-you-want"><span class="toc__title">2.3 Choose the Batches You Want</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-non-guided-batch-generation"><span class="toc__title">2.4 Manual Batch Generation</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-building-coverage-across-the-corpus"><span class="toc__title">2.5 Building Coverage Across the Corpus</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-two-batch-synthesizer-planning-coverage-and-variety"><span class="toc__title">2.6 Planning Coverage and Variety</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-three-document-converter">
+            <span class="toc__title">Part Three · Convert Documents into SFT Examples</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">4</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-three-document-converter-knowledge-conversion"><span class="toc__title">3.1 Knowledge Conversion</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-three-document-converter-transcript-conversion"><span class="toc__title">3.2 Transcript Conversion</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">4</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-three-document-converter-literature-conversion"><span class="toc__title">3.3 Literature Conversion</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-three-document-converter-conversion-instructions"><span class="toc__title">3.4 Conversion Instructions</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-three-document-converter-document-conversion-sequence"><span class="toc__title">3.5 Document Conversion Sequence</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-four-ftk-corpus">
+            <span class="toc__title">Part Four · Optional FTK TRiAD Alignment Corpus</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">5</span>
+          </a>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-five-quality-assurance">
+            <span class="toc__title">Part Five · Quality Assurance</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">5–6</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-five-quality-assurance-automated-qa"><span class="toc__title">5.1 Automated QA</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-five-quality-assurance-manual-qa"><span class="toc__title">5.2 Manual QA</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-five-quality-assurance-regenerate-flagged"><span class="toc__title">5.3 Regenerate Flagged</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">5</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-five-quality-assurance-deduplicate"><span class="toc__title">5.4 Deduplicate</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-five-quality-assurance-approve-or-reject"><span class="toc__title">5.5 Approve or Reject</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-six-batch-registry">
+            <span class="toc__title">Part Six · Dataset Registry and Compile &amp; Export</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">6</span>
+          </a>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-seven-automated-training">
+            <span class="toc__title">Part Seven · Automated Training</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">6</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-seven-automated-training-choose-a-base-model"><span class="toc__title">7.1 Choose a Base Model or Continue from a Previous Model</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-seven-automated-training"><span class="toc__title">7.2 Complete Setup</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-seven-automated-training"><span class="toc__title">7.3 Confirm the Configuration</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-seven-automated-training"><span class="toc__title">7.4 Approve &amp; Submit the Fine-Tune Job</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-eight-model-access">
+            <span class="toc__title">Part Eight · Model Access and Repository Options</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">6–7</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-eight-model-access"><span class="toc__title">8.1 Free Model Sample</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-eight-model-access-public-model"><span class="toc__title">8.2 Public Model</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-eight-model-access-transfer-to-hugging-face"><span class="toc__title">8.3 Transfer to the User’s Hugging Face Account</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">6</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-eight-model-access-request-removal"><span class="toc__title">8.4 Request Removal from the TRiAD Ai Public Repository</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">7</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-part-nine-craft-notes">
+            <span class="toc__title">Part Nine · Craft Notes and Common Pitfalls</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">7</span>
+          </a>
+          <ul class="toc__children">
+            <li><a class="toc__row toc__row--child" href="#manual-part-nine-craft-notes-repetition"><span class="toc__title">9.1 Repetition</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">7</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-nine-craft-notes-overfitting-and-narrow-coverage"><span class="toc__title">9.2 Overfitting and Narrow Coverage</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">7</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-nine-craft-notes-skipping-review"><span class="toc__title">9.3 Skipping Review</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">7</span></a></li>
+            <li><a class="toc__row toc__row--child" href="#manual-part-nine-craft-notes-changing-the-project-definition"><span class="toc__title">9.4 Changing the Project Definition</span><span class="toc__leader" aria-hidden="true"></span><span class="toc__page">7</span></a></li>
+          </ul>
+        </li>
+
+        <li class="toc__group">
+          <a class="toc__row toc__row--part" href="#manual-quick-reference">
+            <span class="toc__title">Quick Reference</span>
+            <span class="toc__leader" aria-hidden="true"></span>
+            <span class="toc__page">8</span>
+          </a>
+        </li>
+
+      </ul>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-welcome">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Welcome to SFT Studio Pro</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>SFT Studio Pro is a workspace for building supervised fine-tuning (SFT) datasets and moving them through a connected workflow: complete project onboarding, create or convert examples, review batches, assemble the approved corpus, train a model, and try it with a free model chat sample.</p>
+
+      <p>This manual follows the order in which the work is completed in the application. It includes SFT background, dataset planning, project onboarding and definition, automated and manual batch generation, the Document Converter, the optional FTK TRiAD alignment corpus, QA, the Dataset Registry, Automated Training, and model access.</p>
+
+      <section class="doc__section" id="manual-welcome-understanding-sft">
+        <h2>Understanding SFT</h2>
+        <p>Supervised fine-tuning is teaching by example. A model is shown examples of inputs and the responses desired for those inputs. Across the training examples, the model learns patterns in format, voice, content, and response style. An SFT example may be an instruction-response item or a multi-turn conversation, depending on the project's selected example type.</p>
+        <p>The completed dataset is a collection of structured examples. SFT Studio Pro organizes these examples in batches so they can be generated or imported, reviewed, and approved before being added to the project corpus.</p>
+      </section>
+
+      <section class="doc__section" id="manual-welcome-planning-the-dataset">
+        <h2>Planning the dataset</h2>
+        <p>There is no single correct dataset size for every project. The amount of data depends on the model, the range of tasks, and the intended identity and capabilities of the finished model. A focused assistant with a narrow purpose can be well served by a smaller, carefully reviewed corpus, while a model expected to handle varied requests benefits from broader coverage.</p>
+        <p>Quality matters more than raw count. A modest set of accurate, consistent, well-structured examples usually outperforms a larger set that is uneven. Because the app builds the dataset in batches, you can start with a core set of topics and grow the corpus incrementally — reviewing each batch as it arrives rather than committing to a final size up front.</p>
+      </section>
+
+      <section class="doc__section" id="manual-welcome-quality-and-coverage">
+        <h2>Quality and coverage</h2>
+        <p>A dataset can contain many examples and still cover only a narrow range of situations. Coverage means the corpus spans the skills, subjects, and interaction types the model will face — including varied phrasings, different difficulty levels, short and extended exchanges, and ambiguous requests.</p>
+        <p>Quality is enforced at two points. First, the <strong>golden example</strong> approved during onboarding defines the structure and standard every generated example follows. Later, <strong>Quality Assurance</strong> analyzes each generated or converted batch, flags potentially problematic examples with written explanations, and leaves the final approval decision to you.</p>
+      </section>
+
+      <section class="doc__section" id="manual-welcome-training-corpus-and-validator">
+        <h2>Training Corpus and Validator</h2>
+        <p>The batches you select in the Dataset Registry compile into the project corpus. During Compile &amp; Export, the app automatically partitions the selected examples into two files: a <strong>training set</strong> (the bulk of the examples) and a <strong>validation set</strong> (approximately 10%), used to measure the model during training.</p>
+        <p>The Automated Trainer takes both of these splits, verifies that they are non-empty and match the required ChatML format, and runs the training pipeline once you approve and submit the fine-tune job. The validator is what makes the training run measurable: it holds back examples the model did not train on, so its progress is tested against unseen data.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-contents">← Table of Contents</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-one-define-the-project">Part One · Project Onboarding →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-one-define-the-project">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part One · Define the Project</h1>
+    </header>
+
+    <article class="doc">
+
+      <section class="doc__section" id="manual-part-one-define-the-project-choose-the-project-mode">
+        <h2>1. Choose the project mode</h2>
+        <p>Project Definition offers two modes. Select the mode that fits how you want to create the project definition.</p>
+
+        <h3>AI-Guided</h3>
+        <p>In AI-Guided mode, the AI asks questions and creates the project-definition answers from the user's responses. The user works through the questions, then reviews the resulting definition.</p>
+
+        <h3>Non-Guided</h3>
+        <p>In Non-Guided mode, the user defines the project directly through the project-definition interface, without the AI-guided question-and-answer process.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-one-define-the-project-set-the-project-details">
+        <h2>2. Set the project details</h2>
+        <p>Use the available Project Definition fields to specify the model and dataset you intend to create. The established definition includes the system prompt, target goal, and constraints or instructions.</p>
+        <ul>
+          <li><strong>System Prompt:</strong> Describes the model's identity and characteristics, including who it is and how it should respond.</li>
+          <li><strong>Target Goal:</strong> Defines what the finished model should be able to do, its purpose, and the kinds of interactions it should handle.</li>
+          <li><strong>Constraints &amp; Instructions:</strong> Provides practical guidance for generation, such as preferred response length, wording preferences, stylistic boundaries, or duplicate avoidance.</li>
+        </ul>
+        <p>A clear, specific project definition gives the generation workflow a consistent reference.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-one-define-the-project-select-the-example-type">
+        <h2>3. Select the example type</h2>
+        <p>The example type is chosen during Project Definition, not in the Batch Registry.</p>
+        <ul>
+          <li>In AI-Guided mode, the system automatically chooses <strong>Instruction</strong> or <strong>Chat/Multi-Turn</strong>.</li>
+          <li>In Non-Guided mode, the user selects the applicable type during Project Definition.</li>
+        </ul>
+        <p>This choice is part of project setup and does not need to be selected again in the Batch Registry.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-one-define-the-project-lock-the-project-definition">
+        <h2>4. Lock the project definition</h2>
+        <p>When the project definition is ready, lock it to proceed with that project. A locked project definition cannot be unlocked. If the user needs a different definition, the user must start a new project.</p>
+        <p>Locking keeps the project definition consistent across the batches created under it. Review the definition before locking because it cannot be reopened for edits.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-welcome">← Welcome to SFT Studio Pro</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-two-batch-synthesizer">Part Two · Batch Synthesizer →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-two-batch-synthesizer">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Two · Batch Synthesizer and Data Creation</h1>
+    </header>
+
+    <article class="doc">
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-what-a-batch-is">
+        <h2>What a batch is</h2>
+        <p>A batch is a group of examples created around a skill, subject, or purpose. Working in batches makes it possible to review a focused set of examples at a time, check coverage, and make a separate approval decision for each group.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-ai-guided-batch-generation">
+        <h2>AI-Guided batch generation</h2>
+        <p>AI-Guided batch generation begins with the user's list of skills and returns prepared batch suggestions.</p>
+        <ol>
+          <li>The AI asks the user for a list of skills the project should cover.</li>
+          <li>The AI generates <strong>20 suggested batches</strong> from the skill list.</li>
+          <li>The user returns to the application UI. The 20 generated batch examples are waiting there, complete and ready to be copied.</li>
+          <li>Click the copy button once to place a selected suggestion into the Batch Synthesizer.</li>
+          <li>Generate and approve the selected batch. Batches must be generated and approved one at a time.</li>
+        </ol>
+      </section>
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-choose-the-batches-you-want">
+        <h2>Choose the batches you want</h2>
+        <p>The 20 suggestions are optional. The user may leave out suggestions that do not fit the project and may define and generate additional batches as desired. The user determines which batches become part of the project dataset.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-non-guided-batch-generation">
+        <h2>Non-Guided batch generation</h2>
+        <p>In Non-Guided mode, the user defines and generates batches directly in the application. The user chooses the batch topics and decides which batches to create.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-building-coverage-across-the-corpus">
+        <h2>Building coverage across the corpus</h2>
+        <p>The corpus is the collection of approved batches assembled for the project. Batches can cover different skills, subjects, and interaction types, allowing the user to see what has been included and where additional examples may be useful.</p>
+        <p>The corpus may include generated batches, batches created through document conversion, and the optional pre-generated FTK TRiAD alignment corpus. Every batch must be analyzed in QA before it can enter the registry.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-two-batch-synthesizer-planning-coverage-and-variety">
+        <h2>Planning coverage and variety</h2>
+        <p>A dataset can contain many examples and still cover only a narrow range of situations. Review the skills list and the batches already in the registry to see which areas have been covered and which still need examples. AI-Guided suggestions can map a starting set of skills, while additional user-defined batches can address gaps.</p>
+        <p>Consider including varied phrasings, different levels of task difficulty, short and extended interactions, ambiguous requests, and situations that require a carefully tailored response. Avoid relying on one repeated formulation when several natural formulations can demonstrate the same skill.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-one-define-the-project">← Part One · Define the Project</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-three-document-converter">Part Three · Convert Documents →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-three-document-converter">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Three · Convert Documents into SFT Examples</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>The Document Converter lets users upload documents and convert their contents into SFT examples. Each conversion starts with a choice among three conversion types: <strong>Knowledge</strong>, <strong>Transcript</strong>, or <strong>Literature</strong>.</p>
+
+      <section class="doc__section" id="manual-part-three-document-converter-knowledge-conversion">
+        <h2>Knowledge conversion</h2>
+        <p>Choose Knowledge to convert document content into knowledge-oriented SFT examples. The UI includes an instructions field where the user can specify what the conversion generator should do with the source material.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-three-document-converter-transcript-conversion">
+        <h2>Transcript conversion</h2>
+        <p>Choose Transcript when the uploaded document contains a transcript or conversation with speaker turns. The source document must use identifiable role labels so the converter can interpret which role is speaking.</p>
+        <ul>
+          <li>When Transcript is selected, the UI displays a dedicated field for entering the role labels used in the document.</li>
+          <li>Enter the source labels, such as <strong>user</strong> and <strong>assistant</strong>, matching the document.</li>
+          <li>Use the instructions field to provide any additional directions for the conversion generator.</li>
+        </ul>
+        <p>The role-label field is specific to Transcript conversion. It is separate from the conversion-instructions field.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-three-document-converter-literature-conversion">
+        <h2>Literature conversion</h2>
+        <p>Choose Literature to convert literary material into SFT examples. The instructions field lets the user specify requirements for how the conversion generator should handle the source material.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-three-document-converter-conversion-instructions">
+        <h2>Conversion instructions</h2>
+        <p>All three conversion types provide a field for specific instructions to the conversion generator. Knowledge, Transcript, and Literature each have this field; Transcript additionally has the role-label field.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-three-document-converter-document-conversion-sequence">
+        <h2>Document conversion sequence</h2>
+        <ol>
+          <li>Upload the document or documents to be converted.</li>
+          <li>Select Knowledge, Transcript, or Literature.</li>
+          <li>If Transcript is selected, enter the role labels used in the source document.</li>
+          <li>Enter any specific conversion instructions.</li>
+          <li>Run the conversion to create SFT examples.</li>
+          <li>Review the resulting batch in QA before adding it to the Data Registry.</li>
+        </ol>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-two-batch-synthesizer">← Part Two · Batch Synthesizer</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-four-ftk-corpus">Part Four · Optional FTK Corpus →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-four-ftk-corpus">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Four · Optional FTK TRiAD Alignment Corpus</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>The pre-generated FTK TRiAD alignment corpus is optional. It can be added with one click by choosing the desired batch size.</p>
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Available batch size</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>150 examples</td>
+              <td>Add a pre-generated batch of 150 examples.</td>
+            </tr>
+            <tr>
+              <td>300 examples</td>
+              <td>Add a pre-generated batch of 300 examples.</td>
+            </tr>
+            <tr>
+              <td>750 examples</td>
+              <td>Add a pre-generated batch of 750 examples.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <p>Choose whether to include the corpus and select the available size that fits the project. The corpus is optional.</p>
+
+      <p><strong>TRiAD Alignment imports are separate from generated and converted batches. TRiAD batches are pre-approved on import, and the automated QA run does not audit them.</strong></p>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-three-document-converter">← Part Three · Document Converter</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-five-quality-assurance">Part Five · Quality Assurance →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-five-quality-assurance">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Five · Quality Assurance</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>Each generated or converted batch must be analyzed in QA before it can be added to the Dataset Registry. QA is not a guided question-and-answer workflow. It analyzes the batch, flags potentially problematic examples, and provides a clear written explanation for each flag. TRiAD Alignment batches are pre-approved on import and are not audited by the automated QA run.</p>
+
+      <p>Open <strong>Quality Assurance → AI Guide</strong>. Its first question asks whether to run the audit for you or have you run it yourself.</p>
+
+      <section class="doc__section" id="manual-part-five-quality-assurance-automated-qa">
+        <h2>Automated QA</h2>
+        <p>Choose <strong>Run the Quality Audit for me</strong> for automated QA. The app audits up to four batches concurrently, and progress advances as each batch&rsquo;s audit finishes. Flagged examples may go through the automated repair process.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-five-quality-assurance-manual-qa">
+        <h2>Manual QA</h2>
+        <p>Choose <strong>I&rsquo;ll run the quality analysis myself</strong> to continue through the manual guide:</p>
+        <ol>
+          <li>Select a batch.</li>
+          <li>Run <strong>Run AI Quality Audit</strong>.</li>
+          <li>Review the score and each flagged example with its written explanation.</li>
+          <li>Decide whether to regenerate, remove, approve, or reject examples.</li>
+        </ol>
+        <p>A perfect score is not required for approval.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-five-quality-assurance-regenerate-flagged">
+        <h2>Regenerate Flagged</h2>
+        <p>Click <strong>Regenerate Flagged</strong> to automatically regenerate flagged examples. The regenerated examples are analyzed again.</p>
+        <p>Some examples may remain flagged or return to the flagged group if regeneration has not adequately addressed the issue. You can click Regenerate Flagged repeatedly to continue the process, including until the score reaches 100% if desired.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-five-quality-assurance-deduplicate">
+        <h2>Deduplicate</h2>
+        <p>Click <strong>Deduplicate</strong> to instantly delete all flagged examples from the batch. Regenerate Flagged attempts to regenerate the examples; Deduplicate deletes the flagged examples.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-five-quality-assurance-approve-or-reject">
+        <h2>Approve or reject</h2>
+        <p>After QA analysis, you must approve or reject the batch. Approved batches are added to the Dataset Registry.</p>
+        <p><strong>You may ignore any flags and approve the batch. A flag may not align with your intention for an example, so you retain the final say on quality. You may approve a batch with flags remaining and do not have to reach a 100% score first.</strong></p>
+        <p>Once QA is complete, the app offers the option to train a model or export the dataset.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-four-ftk-corpus">← Part Four · FTK Corpus</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-six-batch-registry">Part Six · Dataset Registry →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-six-batch-registry">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Six · Dataset Registry and Compile &amp; Export</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>The Dataset Registry is where the user selects which QA-checked batches will make up the final dataset. It is not simply a list of every batch in the project: the user chooses which approved batches to include in the dataset that will be compiled and exported.</p>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-select-batches-for-the-final-dataset">
+        <h2>Select batches for the final dataset</h2>
+        <p>Each registry entry represents a batch and displays identifying information so the user can recognize what is being included. Depending on the batch, the entry can show its name, batch ID, source, template, number of examples, and QA-checked status. A selection control lets the user include or leave out each batch.</p>
+        <ul>
+          <li>Review the batch name and source to identify the content, such as Document Conversion.</li>
+          <li>Check the template shown for the batch, such as an Instruction Template.</li>
+          <li>Review the example count and confirm that the batch is marked QA Checked.</li>
+          <li>Select the batches you want in the final dataset. Only the selected batches are included in the compile-and-export operation.</li>
+        </ul>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-review-the-selected-dataset-breakdown">
+        <h2>Review the selected dataset breakdown</h2>
+        <p>The Selected Dataset Breakdown summarizes the current selection before export. It reports how many batches are included and the total number of selected SFT examples. It also shows the automatic partition into training and validation sets.</p>
+        <p>The application partitions approximately 10% of the selected examples for validation and assigns the remainder to the training set. For example, a selection of 115 examples may be divided into 103 training examples and 12 validation examples. The displayed counts are the actual counts for that selection.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-choose-the-target-export-template">
+        <h2>Choose the target export template</h2>
+        <p>Target Export Template Format controls the format applied to the selected dataset for export. Choose the template that matches the format you intend to use. The interface displays the selected format and a description of its structure. For example, a ChatML instruction format uses role markers such as &lt;|im_start|&gt; and &lt;|im_end|&gt; to mark message boundaries.</p>
+        <p>After choosing the desired template, use the format action to apply that format to the selected batches. The Apply to Batches action applies the selected export template to the batch data. The interface's formatted output preview then shows how the data is represented in the selected format.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-inspect-the-formatted-output-preview">
+        <h2>Inspect the formatted output preview</h2>
+        <p>The Formatted Dataset Output Preview lets the user inspect the converted structure before exporting. It identifies the active format and provides a preview of the output data. The preview can show both a JSONL representation, where each record occupies a single line, and a pretty-printed JSON representation, where the same structure is displayed across multiple lines for easier reading.</p>
+        <ul>
+          <li>Use the preview to confirm that the selected template has been applied and that the output structure looks as intended.</li>
+          <li>Use the copy control to copy the JSON preview when needed.</li>
+          <li>The preview is a representation of the formatted dataset; the export controls below produce the actual training and validation files.</li>
+        </ul>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-compile-the-dataset-and-export-both-subsets">
+        <h2>Compile the dataset and export both subsets</h2>
+        <p>Compile &amp; Export gathers the selected batches, applies the selected export format, and prepares separate files for training and validation. The application partitions approximately 10% of the selected examples into the validation subset and uses the remaining examples for the training subset.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-training-set-exports">
+        <h2>Training-set exports</h2>
+        <p>The training section provides controls to export the training set as JSON or JSONL and to copy the training JSONL content to the clipboard. JSON is a structured document containing the records; JSONL stores one JSON record per line.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-validation-set-exports">
+        <h2>Validation-set exports</h2>
+        <p>The validation section provides corresponding controls to export the validation subset as JSON or JSONL and to copy the validation JSONL content to the clipboard. Keep the training and validation files distinct because they represent separate subsets of the compiled dataset.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-six-batch-registry-compile-and-export-sequence">
+        <h2>Compile &amp; Export sequence</h2>
+        <ol>
+          <li>In the Dataset Registry, select the QA-checked batches to include in the final dataset.</li>
+          <li>Review the selected batch count and total selected SFT examples.</li>
+          <li>Review the automatically partitioned training and validation counts.</li>
+          <li>Choose the Target Export Template Format.</li>
+          <li>Apply the selected export format to the batches.</li>
+          <li>Inspect the Formatted Dataset Output Preview.</li>
+          <li>Export or copy the training set and validation set in the required JSON or JSONL form.</li>
+        </ol>
+      </section>
+
+      <p>Compile &amp; Export prepares the dataset files for the next stage. It is distinct from Automated Training: this stage selects, formats, partitions, and exports the data; Automated Training uses the resulting training corpus and validator to run the selected model's training pipeline.</p>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-five-quality-assurance">← Part Five · Quality Assurance</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-seven-automated-training">Part Seven · Automated Training →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-seven-automated-training">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Seven · Automated Training</h1>
+    </header>
+
+    <article class="doc">
+
+      <p>Automated Training follows the Batch Registry. It takes the project's training corpus and validator and runs them through the training pipeline.</p>
+
+      <section class="doc__section" id="manual-part-seven-automated-training-choose-a-base-model">
+        <h2>Choose a base model</h2>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Base model</th>
+                <th>Recommended use</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Qwen 3.5 9B Base</td>
+                <td>Recommended overall.</td>
+              </tr>
+              <tr>
+                <td>Qwen 3.5 4B</td>
+                <td>Recommended for low-compute local deployment.</td>
+              </tr>
+              <tr>
+                <td>Llama 3.1 70B</td>
+                <td>Recommended for hosted deployment and more complex enterprise purposes.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Choose the base model that fits the intended deployment and start the automated workflow. The system automates the training pipeline using the training corpus and validator. When training finishes, the workflow provides a link to the resulting model on Hugging Face.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-six-batch-registry">← Part Six · Dataset Registry</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-eight-model-access">Part Eight · Model Access →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-eight-model-access">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Eight · Model Access and Repository Options</h1>
+    </header>
+
+    <article class="doc">
+
+      <section class="doc__section" id="manual-part-eight-model-access-public-model">
+        <h2>Public model</h2>
+        <p>The model produced by Automated Training will be public in the TRiAD Ai public Hugging Face repository.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-eight-model-access-transfer-to-hugging-face">
+        <h2>Transfer to the user's Hugging Face account</h2>
+        <p>The user can transfer the resulting model to their own Hugging Face account. This is optional.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-eight-model-access-request-removal">
+        <h2>Request removal from the TRiAD Ai public repository</h2>
+        <p>The user may optionally request that the public model be deleted from the TRiAD Ai public repository. The requested removal will be completed within 48 hours.</p>
+        <p>Transferring the model to the user's own account and requesting removal from the TRiAD Ai public repository are separate options.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-seven-automated-training">← Part Seven · Automated Training</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-part-nine-craft-notes">Part Nine · Craft Notes →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-part-nine-craft-notes">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Part Nine · Craft Notes and Common Pitfalls</h1>
+    </header>
+
+    <article class="doc">
+
+      <section class="doc__section" id="manual-part-nine-craft-notes-repetition">
+        <h2>Repetition</h2>
+        <p>When the same phrase appears across many examples, the trained model may repeat it even when it does not fit the situation. Review repeated introductions, stock endings, and overly similar examples during QA.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-nine-craft-notes-overfitting-and-narrow-coverage">
+        <h2>Overfitting and narrow coverage</h2>
+        <p>A small or narrow dataset can encourage memorization rather than broader pattern learning. Variety across skills, phrasings, and situations gives the dataset more coverage. The training workflow includes a validator alongside the corpus.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-nine-craft-notes-skipping-review">
+        <h2>Skipping review</h2>
+        <p>QA is part of the workflow before registry entry. Review the explanations attached to flags and choose the appropriate action for each batch. The user has the final say: flags can be regenerated, removed through Deduplicate, or left in place when the user decides the batch should be approved.</p>
+      </section>
+
+      <section class="doc__section" id="manual-part-nine-craft-notes-changing-the-project-definition">
+        <h2>Changing the project definition</h2>
+        <p>The project definition cannot be unlocked once locked. If a different definition is required, start a new project.</p>
+      </section>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-eight-model-access">← Part Eight · Model Access</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__next"><a href="#manual-quick-reference">Quick Reference →</a></span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+<section class="page" id="manual-quick-reference">
+
+    <div class="topline">
+      <span class="topline__brand">TRiAD Ai</span>
+      <a href="#manual-contents">← Table of Contents</a>
+    </div>
+
+    <header class="doc-head">
+      <h1>Quick Reference</h1>
+    </header>
+
+    <article class="doc">
+
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr>
+              <th>Stage</th>
+              <th>Action</th>
+              <th>Key point</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Project Definition</td>
+              <td>Choose AI-Guided or Non-Guided; define the project; select the example type.</td>
+              <td>Locked definitions cannot be unlocked; start a new project to change them.</td>
+            </tr>
+            <tr>
+              <td>Batch Synthesizer</td>
+              <td>Generate directly or use 20 AI-generated suggestions.</td>
+              <td>Copy and generate batches one at a time; suggestions are optional.</td>
+            </tr>
+            <tr>
+              <td>Document Converter</td>
+              <td>Upload documents and choose Knowledge, Transcript, or Literature.</td>
+              <td>Enter instructions for all types and role labels for Transcript.</td>
+            </tr>
+            <tr>
+              <td>FTK TRiAD corpus</td>
+              <td>Optionally add a pre-generated batch.</td>
+              <td>Choose 150, 300, or 750 examples.</td>
+            </tr>
+            <tr>
+              <td>QA</td>
+              <td>Analyze, review flags, regenerate or deduplicate, then approve or reject.</td>
+              <td>The user retains the final decision.</td>
+            </tr>
+            <tr>
+              <td>Batch Registry</td>
+              <td>Collect approved batches.</td>
+              <td>Templates have expanded; example type is set in Project Definition.</td>
+            </tr>
+            <tr>
+              <td>Automated Training</td>
+              <td>Train the corpus and validator on a selected base model.</td>
+              <td>Qwen 3.5 9B Base, Qwen 3.5 4B, or Llama 3.1 70B.</td>
+            </tr>
+            <tr>
+              <td>Model access</td>
+              <td>Open the Hugging Face model link.</td>
+              <td>Transfer to your account if desired; repository removal is available on request within 48 hours.</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </article>
+
+    <nav class="pagenav" aria-label="Section navigation">
+      <span><a href="#manual-part-nine-craft-notes">← Part Nine · Craft Notes</a></span>
+      <span class="pagenav__toc"><a href="#manual-contents">Table of Contents</a></span>
+      <span class="pagenav__spacer">Next →</span>
+    </nav>
+
+    <footer class="colophon">
+      <p>SFT Studio Pro · triadicai.agency · Supervised Fine-Tuning Synthesis Workspace</p>
+    </footer>
+
+  </section>
+</main>
+</body>
+</html>
